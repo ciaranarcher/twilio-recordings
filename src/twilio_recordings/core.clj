@@ -15,8 +15,6 @@
     "RE0f69e72c5e00c047af27c9d8811f6580"
  ))
 
-(def twilio-sid "AC1d43679a7bced3f4aaa6c42aa8ef5a3d")
-
 ; TODO write test for this
 (defn fetch-url [url file]
   (with-open [in (io/input-stream url)
@@ -29,12 +27,12 @@
      :url (str "http://api.twilio.com/2010-04-01/Accounts/" acc-sid "/Recordings/" %)
      :file (str "/tmp/" % ".mp3")) recording-sids))
 
+; TODO write a test for this
 (defn cat-many [out files]
     (map #(with-open [o (io/output-stream out)]
             (io/copy (io/file %) o)) files))
 
 ;(cat-many "/tmp/ciaran.mp3" '("/tmp/test-recording-1.mp3" "/tmp/test-recording-2.mp3"))
-
 
 (defn fetch [acc-sid recording-sids]
   (pmap #(fetch-url (:url %) (:file %)) (urls-files acc-sid recording-sids)))
