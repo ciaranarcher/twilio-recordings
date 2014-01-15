@@ -13,18 +13,34 @@
 (use-fixtures :each file-setup)
 
 (deftest test-urls-files
-  (def recordings-sids '("RE123" "RE456" "RE789"))
-  (def acc-sid "AC112233")
+  (let [recordings-sids '("RE123" "RE456" "RE789")]
+  (let [acc-sid "AC112233"]
+  (let [expected '({:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE123" :file "/tmp/RE123.mp3"}
+                    {:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE456" :file "/tmp/RE456.mp3"}
+                    {:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE789" :file "/tmp/RE789.mp3"})]
 
   (testing "creating file paths and urls from recordings sids"
-    (def expected '({:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE123" :file "/tmp/RE123.mp3"}
-                    {:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE456" :file "/tmp/RE456.mp3"}
-                    {:url "http://api.twilio.com/2010-04-01/Accounts/AC112233/Recordings/RE789" :file "/tmp/RE789.mp3"}))
-    (is (= (twilio-recordings.core/urls-files acc-sid recordings-sids) expected))))
-
+    (is (= (twilio-recordings.core/urls-files acc-sid recordings-sids) expected)))))))
 
 (deftest test-cat-many
   (testing "concatenating many files"
-    (def target-file "/tmp/test.dat")
+    (let [target-file "/tmp/test.dat"]
     (twilio-recordings.core/cat-many target-file temp-files)
-    (is (= (.exists (io/as-file target-file)) true))))
+    (is (= (.exists (io/as-file target-file)) true)))))
+
+(deftest test-fetch-url ;This will hit the internets. Alternative solutions?
+  (testing "fetching urls and saving to disk"
+    (let [target-file "/tmp/doge.jpg"]
+    (twilio-recordings.core/fetch-url "http://i.huffpost.com/gen/1451579/thumbs/o-DOGE-570.jpg?6" target-file)
+    (is (= (.exists (io/as-file target-file)) true))
+    (io/delete-file target-file))))
+
+(deftest test-fetch
+  (testing "fetching works and creates a new single recording"
+    (let [target-file "/tmp/all.mp3"]
+    (let [recording-sids '("RE93fcf1c3912aea0db664914147789e10"
+                           "REcd5c5bec7ff667d5c3f1502d04ccb79e"
+                           "REf7b24375cdbbbb42f58828f2fdf7b5a9"
+                           "RE23c45b6262e256a455b1ee296af53fbb")]
+    (twilio-recordings.core/fetch "ACeb4e7b38952d70a91bc4a4acea8dc9e0" recording-sids target-file)
+    (is (= (.exists (io/as-file target-file)) true))))))
