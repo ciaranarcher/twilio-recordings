@@ -11,7 +11,6 @@ more about Clojure.
 
 ```
 (twilio-recordings.core/fetch "AC1234" ("RC123" "RC456") "/tmp/all-recordings.mp3")
-
 ```
 
 It should fetch all recordings, and concatenate them locally to the given file.

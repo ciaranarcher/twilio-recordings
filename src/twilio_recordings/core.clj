@@ -2,8 +2,7 @@
 
 (ns twilio-recordings.core
      [:require [clojure.java [io :as io]]]
-     [:use [clojure.java.shell :only [sh]]]
-)
+     [:use [clojure.java.shell :only [sh]]])
 
 (defn fetch-url [url file]
   (with-open [in (io/input-stream url)
