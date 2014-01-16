@@ -1,5 +1,3 @@
-(ns twilio-recordings.core)
-
 (ns twilio-recordings.core
      [:require [clojure.java [io :as io]]]
      [:use [clojure.java.shell :only [sh]]])

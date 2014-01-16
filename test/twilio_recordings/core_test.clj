@@ -1,7 +1,7 @@
 (ns twilio-recordings.core-test
   [:require [clojure.java [io :as io]]]
   [:use [twilio-recordings [core :as twl-recs]]]
-  [:use clojure [test :as test])
+  [:use clojure.test])
 
 (def temp-files '("/tmp/piece1.dat" "/tmp/piece2.dat" "/tmp/piece3.dat"))
 
